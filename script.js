@@ -1,8 +1,9 @@
 // Global tasks array
 let tasks = []; // This will be updated by loadTasks
 
-// localStorage key
+// localStorage keys
 const TASKS_STORAGE_KEY = 'tasks';
+const THEME_STORAGE_KEY = 'themePreference'; // Added
 
 // DOM Element References
 const taskInput = document.getElementById('taskInput');
@@ -14,6 +15,8 @@ const filterAllBtn = document.getElementById('filterAll');
 const filterActiveBtn = document.getElementById('filterActive');
 const filterCompletedBtn = document.getElementById('filterCompleted');
 const searchInput = document.getElementById('searchInput');
+const themeToggle = document.getElementById('themeToggle'); // Added
+const body = document.body; // Added
 
 // Global filter variable
 let currentFilter = 'all'; // 'all', 'active', 'completed'
@@ -325,9 +328,16 @@ tasks.push({ id: Date.now() + 3, text: 'Learn JavaScript', completed: false });
 
 // Initial setup when the script loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Load and apply saved theme first
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        applyTheme('dark'); // Default to dark theme if no preference saved
+    }
+
     loadTasks(); // Load tasks from localStorage
     renderTasks(); // Display the loaded tasks
-    // console.log("script.js loaded, tasks loaded from localStorage, and initial render executed."); // Debug log removed
     updateFilterButtonsUI(); // Set initial active state for 'All' button
 
     // Event Listener for Search Input
@@ -404,3 +414,27 @@ function updateFilterButtonsUI() {
 if (filterAllBtn) filterAllBtn.addEventListener('click', () => setFilter('all'));
 if (filterActiveBtn) filterActiveBtn.addEventListener('click', () => setFilter('active'));
 if (filterCompletedBtn) filterCompletedBtn.addEventListener('click', () => setFilter('completed'));
+
+// --- Theme Switching Logic ---
+function applyTheme(theme) {
+    if (theme === 'light') {
+        body.classList.add('light-mode');
+        if (themeToggle) themeToggle.checked = true;
+    } else { // 'dark' or any other case
+        body.classList.remove('light-mode');
+        if (themeToggle) themeToggle.checked = false;
+    }
+}
+
+function saveThemePreference(theme) {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+}
+
+if (themeToggle) {
+    themeToggle.addEventListener('change', () => {
+        const newTheme = themeToggle.checked ? 'light' : 'dark';
+        applyTheme(newTheme);
+        saveThemePreference(newTheme);
+    });
+}
+// --- End Theme Switching Logic ---

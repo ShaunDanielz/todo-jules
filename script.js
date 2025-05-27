@@ -7,17 +7,19 @@ const TASKS_STORAGE_KEY = 'tasks';
 // DOM Element References
 const taskInput = document.getElementById('taskInput');
 const dueDateInput = document.getElementById('dueDateInput');
-const priorityInput = document.getElementById('priorityInput'); // Added
+const priorityInput = document.getElementById('priorityInput'); 
 const addTaskBtn = document.getElementById('addTaskBtn');
 const taskList = document.getElementById('taskList');
 const filterAllBtn = document.getElementById('filterAll');
 const filterActiveBtn = document.getElementById('filterActive');
 const filterCompletedBtn = document.getElementById('filterCompleted');
+const searchInput = document.getElementById('searchInput');
 
 // Global filter variable
 let currentFilter = 'all'; // 'all', 'active', 'completed'
+let currentSearchTerm = ''; 
 
-// Placeholder functions for actions (to be implemented later)
+// Placeholder functions for actions (to be implemented later) // This comment is a bit misleading now.
 function toggleComplete(taskId) {
     // Find the task by its ID
     const task = tasks.find(t => t.id === taskId);
@@ -143,14 +145,12 @@ function saveEditedTask(taskId, newText, newDueDate, newPriority) {
     const task = tasks.find(t => t.id === taskId);
 
     if (task) {
-        if (textToSave !== '') { // Only update text if it's not empty, otherwise keep original
-            task.text = textToSave;
-        }
+        // Allow task text to be set to empty
+        task.text = textToSave; 
         task.dueDate = newDueDate || null; 
         task.priority = newPriority || 'medium'; // Default to medium if somehow null
         saveTasks();
     }
-    // No specific handling for empty text during edit save, text remains as is if newText is empty.
     renderTasks(); // Re-render to show updated task and exit edit mode
 }
 
@@ -160,25 +160,34 @@ function renderTasks() {
     // Clear any existing items in taskList
     taskList.innerHTML = '';
 
-    // Apply filter
-    let filteredTasks = tasks;
-    if (currentFilter === 'active') {
-        filteredTasks = tasks.filter(task => !task.completed);
-    } else if (currentFilter === 'completed') {
-        filteredTasks = tasks.filter(task => task.completed);
-    }
-    // If currentFilter is 'all', filteredTasks remains the full tasks array.
+    // Start with all tasks
+    let tasksToDisplay = tasks;
 
-    // Sort tasks by priority
+    // 1. Apply status filter (all, active, completed)
+    if (currentFilter === 'active') {
+        tasksToDisplay = tasksToDisplay.filter(task => !task.completed);
+    } else if (currentFilter === 'completed') {
+        tasksToDisplay = tasksToDisplay.filter(task => task.completed);
+    }
+    // 'all' shows all, so no change needed here for status filter
+
+    // 2. Apply search filter
+    if (currentSearchTerm) { // Only filter if searchTerm is not empty
+        tasksToDisplay = tasksToDisplay.filter(task => 
+            task.text.toLowerCase().includes(currentSearchTerm)
+        );
+    }
+
+    // 3. Apply sorting (e.g., by priority)
     const priorityOrder = { high: 1, medium: 2, low: 3 };
-    filteredTasks.sort((a, b) => {
-        const priorityA = priorityOrder[a.priority || 'medium']; // Default to medium if undefined
+    tasksToDisplay.sort((a, b) => {
+        const priorityA = priorityOrder[a.priority || 'medium'];
         const priorityB = priorityOrder[b.priority || 'medium'];
         return priorityA - priorityB;
     });
 
-    // Loop through the filtered and sorted tasks array
-    filteredTasks.forEach(task => {
+    // Then loop through 'tasksToDisplay' to generate the HTML
+    tasksToDisplay.forEach(task => {
         // Create an <li> element
         const li = document.createElement('li');
         li.classList.add('task-item');
@@ -204,7 +213,9 @@ function renderTasks() {
             dueDateSpan.classList.add('due-date');
             // Basic formatting, could be enhanced
             const date = new Date(task.dueDate);
-            // Adjust for timezone to avoid off-by-one day issues with YYYY-MM-DD
+            // The userTimezoneOffset is used to counteract the toLocaleDateString() method's tendency
+            // to shift dates based on the user's local timezone, ensuring the displayed date
+            // matches the input date regardless of timezone.
             const userTimezoneOffset = date.getTimezoneOffset() * 60000;
             dueDateSpan.textContent = `Due: ${new Date(date.getTime() + userTimezoneOffset).toLocaleDateString()}`;
             li.appendChild(dueDateSpan);
@@ -316,8 +327,51 @@ tasks.push({ id: Date.now() + 3, text: 'Learn JavaScript', completed: false });
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks(); // Load tasks from localStorage
     renderTasks(); // Display the loaded tasks
-    console.log("script.js loaded, tasks loaded from localStorage, and initial render executed.");
+    // console.log("script.js loaded, tasks loaded from localStorage, and initial render executed."); // Debug log removed
     updateFilterButtonsUI(); // Set initial active state for 'All' button
+
+    // Event Listener for Search Input
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            currentSearchTerm = searchInput.value.toLowerCase().trim();
+            renderTasks();
+        });
+    }
+
+    // Initialize SortableJS
+    if (taskList && typeof Sortable !== 'undefined') {
+        new Sortable(taskList, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function (evt) {
+                const itemEl = evt.item; // Dragged HTMLElement
+                
+                // Get the new order of task IDs from the DOM, considering only currently displayed tasks
+                const displayedTaskIds = Array.from(taskList.children).map(li => parseInt(li.dataset.id));
+
+                // Create a new tasks array:
+                // 1. Start with tasks that were reordered (visible in the list during the drag)
+                let newTasksArray = displayedTaskIds.map(id => tasks.find(t => t.id === id)).filter(t => t); 
+
+                // 2. Add tasks that were NOT visible (due to filtering/search) 
+                // This ensures that tasks not part of the visible drag operation are preserved in their relative order.
+                tasks.forEach(originalTask => {
+                    if (!newTasksArray.find(t => t.id === originalTask.id)) {
+                        newTasksArray.push(originalTask);
+                    }
+                });
+                
+                tasks = newTasksArray; // Update the global tasks array with the new, complete order
+
+                saveTasks(); // Save the new order
+                renderTasks(); // Re-render to ensure UI consistency, especially if filters/sorting apply.
+            }
+        });
+    } else {
+        console.error("SortableJS not found or taskList element is missing.");
+    }
 });
 
 // Function to set the current filter

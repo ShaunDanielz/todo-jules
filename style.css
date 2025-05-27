@@ -1,8 +1,50 @@
 /* Overall Page and Body */
+:root {
+    --body-background: linear-gradient(to right bottom, #1e1e1e, #2d2d2d);
+    --container-background: #333333;
+    --text-color: #f0f0f0;
+    --header-text-color: #ffffff;
+    --input-background: #2a2a2a;
+    --input-border-color: #444;
+    --input-focus-border-color: #007bff;
+    --input-focus-shadow-color: rgba(0, 123, 255, 0.5);
+    --button-primary-background: #007bff;
+    --button-primary-text: white;
+    --button-primary-hover-background: #0056b3;
+    --button-primary-active-background: #004085; /* Added for completeness */
+    --task-item-background: #2a2a2a;
+    --task-item-border-color: #444;
+    --task-completed-text-color: #888;
+    --task-due-date-color: #bbb;
+    --task-overdue-text-color: #ff6b6b;
+    --action-button-edit-color: #77ccff;
+    --action-button-edit-hover-background: #77ccff;
+    --action-button-edit-hover-text: #1e1e1e;
+    --action-button-delete-color: #ff4d4d;
+    --action-button-delete-hover-background: #ff4d4d;
+    --action-button-delete-hover-text: #fff;
+    --action-button-save-color: #5cb85c;
+    --action-button-save-hover-background: #5cb85c;
+    --action-button-save-hover-text: #fff;
+    --action-button-cancel-color: #aaa;
+    --action-button-cancel-hover-background: #aaa;
+    --action-button-cancel-hover-text: #fff;
+    --edit-input-background: #222;
+    --edit-input-border-color: #555;
+    --sortable-ghost-background: #4a4a4a;
+    --filter-section-border-color: #444;
+    --filter-button-background: #4a4a4a;
+    --filter-button-hover-background: #5a5a5a;
+    --filter-button-active-background: #007bff;
+    --filter-button-active-text: white;
+    --theme-switch-label-color: var(--header-text-color);
+    --checkbox-accent-color: #007bff;
+}
+
 body {
     font-family: 'Roboto', 'Segoe UI', 'Open Sans', sans-serif;
-    background: linear-gradient(to right bottom, #1e1e1e, #2d2d2d);
-    color: #f0f0f0;
+    background: var(--body-background);
+    color: var(--text-color);
     margin: 0;
     padding: 20px;
     display: flex;
@@ -14,7 +56,7 @@ body {
 
 /* Container */
 .container {
-    background-color: #333333;
+    background-color: var(--container-background);
     max-width: 600px;
     width: 100%;
     padding: 30px;
@@ -23,9 +65,13 @@ body {
 }
 
 /* Header */
+header {
+    position: relative; /* For theme switch positioning */
+}
+
 header h1 {
     font-size: 2.8em;
-    color: #ffffff;
+    color: var(--header-text-color);
     text-align: center;
     margin-bottom: 30px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -41,24 +87,24 @@ header h1 {
 #taskInput {
     flex-grow: 1;
     padding: 15px;
-    border: 1px solid #444;
+    border: 1px solid var(--input-border-color);
     border-radius: 8px;
-    background-color: #2a2a2a;
-    color: #f0f0f0;
+    background-color: var(--input-background);
+    color: var(--text-color);
     font-size: 1em;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #taskInput:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 8px var(--input-focus-shadow-color);
 }
 
 #addTaskBtn {
     padding: 15px 25px;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--button-primary-background);
+    color: var(--button-primary-text);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -68,12 +114,12 @@ header h1 {
 }
 
 #addTaskBtn:hover {
-    background-color: #0056b3;
+    background-color: var(--button-primary-hover-background);
     transform: translateY(-2px);
 }
 
 #addTaskBtn:active {
-    background-color: #004085;
+    background-color: var(--button-primary-active-background);
     transform: translateY(0);
 }
 
@@ -89,8 +135,8 @@ header h1 {
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    background-color: #2a2a2a;
-    border: 1px solid #444;
+    background-color: var(--task-item-background);
+    border: 1px solid var(--task-item-border-color);
     border-radius: 8px;
     margin-bottom: 10px;
     transition: background-color 0.3s ease;
@@ -109,11 +155,11 @@ header h1 {
 
 .task-item.completed span.task-text { /* Target the task text specifically */
     text-decoration: line-through;
-    color: #888;
+    color: var(--task-completed-text-color);
 }
 .task-item.completed .due-date { /* Also style due date for completed tasks */
     text-decoration: line-through;
-    color: #888;
+    color: var(--task-completed-text-color);
 }
 
 
@@ -121,25 +167,26 @@ header h1 {
     flex-grow: 1;
     margin-right: 10px; /* Adjusted margin */
     cursor: pointer; /* For toggling completion */
+    color: var(--text-color); /* Ensure task text uses theme color */
 }
 
 .task-item .due-date {
     font-size: 0.8em;
-    color: #bbb;
+    color: var(--task-due-date-color);
     margin-right: 10px; /* Space before action buttons */
 }
 
 .task-item.overdue .task-text {
-    color: #ff6b6b; /* A reddish color for overdue tasks */
+    color: var(--task-overdue-text-color); /* A reddish color for overdue tasks */
 }
 .task-item.overdue .due-date {
-    color: #ff6b6b;
+    color: var(--task-overdue-text-color);
     font-weight: bold;
 }
 
 .task-item .actions button {
     background-color: transparent;
-    color: #ff4d4d;
+    /* color: var(--action-button-delete-color); Default color removed to be more specific */
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -149,67 +196,54 @@ header h1 {
 }
 
 .task-item .actions button.edit-btn {
-    color: #77ccff; /* Light blue for edit */
+    color: var(--action-button-edit-color); /* Light blue for edit */
 }
 .task-item .actions button.edit-btn:hover {
-    background-color: #77ccff;
-    color: #1e1e1e;
+    background-color: var(--action-button-edit-hover-background);
+    color: var(--action-button-edit-hover-text);
 }
 
 .task-item .actions button.delete-btn { /* Keep delete as red */
-    color: #ff4d4d;
+    color: var(--action-button-delete-color);
 }
 .task-item .actions button.delete-btn:hover {
-    color: #fff;
-    background-color: #ff4d4d;
+    color: var(--action-button-delete-hover-text);
+    background-color: var(--action-button-delete-hover-background);
 }
 
 
 /* Styling for elements in Edit Mode */
-.task-item .edit-input {
+.task-item .edit-input,
+.task-item .edit-due-date-input,
+.task-item .edit-priority-input {
     flex-grow: 1;
     padding: 8px;
     margin-right: 8px;
-    border: 1px solid #555;
+    border: 1px solid var(--edit-input-border-color);
     border-radius: 4px;
-    background-color: #222;
-    color: #f0f0f0;
+    background-color: var(--edit-input-background);
+    color: var(--text-color); /* Use theme text color */
 }
-.task-item .edit-due-date-input {
-    padding: 8px;
-    margin-right: 8px;
-    border: 1px solid #555;
-    border-radius: 4px;
-    background-color: #222;
-    color: #f0f0f0;
-}
-.task-item .edit-priority-input {
-    padding: 8px;
-    margin-right: 8px;
-    border: 1px solid #555;
-    border-radius: 4px;
-    background-color: #222;
-    color: #f0f0f0;
-}
+
 .task-item .actions button.save-btn {
-    color: #5cb85c; /* Green for save */
+    color: var(--action-button-save-color); /* Green for save */
 }
 .task-item .actions button.save-btn:hover {
-    background-color: #5cb85c;
-    color: #fff;
+    background-color: var(--action-button-save-hover-background);
+    color: var(--action-button-save-hover-text);
 }
 .task-item .actions button.cancel-btn {
-    color: #aaa; /* Gray for cancel */
+    color: var(--action-button-cancel-color); /* Gray for cancel */
 }
 .task-item .actions button.cancel-btn:hover {
-    background-color: #aaa;
-    color: #fff;
+    background-color: var(--action-button-cancel-hover-background);
+    color: var(--action-button-cancel-hover-text);
 }
 
 /* SortableJS Helper Classes */
 .sortable-ghost {
     opacity: 0.4;
-    background-color: #4a4a4a !important; /* Use !important if necessary to override other styles */
+    background-color: var(--sortable-ghost-background) !important; /* Use !important if necessary to override other styles */
 }
 .sortable-chosen {
     /* Example: Slightly different background or shadow if desired */
@@ -228,31 +262,31 @@ header h1 {
     align-items: center; /* Vertically align items */
     gap: 10px; /* Adjusted gap */
     padding-top: 20px;
-    border-top: 1px solid #444;
+    border-top: 1px solid var(--filter-section-border-color);
     flex-wrap: wrap; /* Allow wrapping if space is tight */
 }
 
 #searchInput {
     flex-grow: 1; /* Allow search input to take available space */
     padding: 10px 15px;
-    border: 1px solid #444;
+    border: 1px solid var(--input-border-color); /* Use same as taskInput */
     border-radius: 8px;
-    background-color: #2a2a2a;
-    color: #f0f0f0;
+    background-color: var(--input-background); /* Use same as taskInput */
+    color: var(--text-color);
     font-size: 0.9em;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     min-width: 150px; /* Minimum width for the search input */
 }
 #searchInput:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 8px var(--input-focus-shadow-color);
 }
 
 .filter-section button {
     padding: 10px 20px;
-    background-color: #4a4a4a;
-    color: #f0f0f0;
+    background-color: var(--filter-button-background);
+    color: var(--text-color);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -261,12 +295,12 @@ header h1 {
 }
 
 .filter-section button:hover {
-    background-color: #5a5a5a;
+    background-color: var(--filter-button-hover-background);
 }
 
 .filter-section button.active {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--filter-button-active-background);
+    color: var(--filter-button-active-text);
     font-weight: bold;
 }
 
@@ -409,7 +443,105 @@ header h1 {
     margin-right: 15px;
     cursor: pointer;
     /* Basic styling for visibility in dark theme */
-    accent-color: #007bff; /* Modern way to color checkboxes */
+    accent-color: var(--checkbox-accent-color); /* Modern way to color checkboxes */
     width: 18px;
     height: 18px;
+}
+
+/* Light Mode Theme */
+body.light-mode {
+    --body-background: linear-gradient(to right bottom, #e0e0e0, #f5f5f5);
+    --container-background: #ffffff;
+    --text-color: #212529;
+    --header-text-color: #333333;
+    --input-background: #ffffff;
+    --input-border-color: #ced4da;
+    --input-focus-border-color: #80bdff;
+    --input-focus-shadow-color: rgba(0, 123, 255, 0.25);
+    --button-primary-background: #007bff; /* Can remain same or be adjusted */
+    --button-primary-text: #ffffff;
+    --button-primary-hover-background: #0056b3;
+    --button-primary-active-background: #004085;
+    --task-item-background: #f8f9fa;
+    --task-item-border-color: #dee2e6;
+    --task-completed-text-color: #6c757d;
+    --task-due-date-color: #495057;
+    --task-overdue-text-color: #dc3545;
+    --action-button-edit-color: #007bff;
+    --action-button-edit-hover-background: #007bff;
+    --action-button-edit-hover-text: #ffffff;
+    --action-button-delete-color: #dc3545;
+    --action-button-delete-hover-background: #dc3545;
+    --action-button-delete-hover-text: #ffffff;
+    --action-button-save-color: #28a745;
+    --action-button-save-hover-background: #28a745;
+    --action-button-save-hover-text: #ffffff;
+    --action-button-cancel-color: #6c757d;
+    --action-button-cancel-hover-background: #6c757d;
+    --action-button-cancel-hover-text: #ffffff;
+    --edit-input-background: #f8f9fa;
+    --edit-input-border-color: #ced4da;
+    --sortable-ghost-background: #e9ecef;
+    --filter-section-border-color: #dee2e6;
+    --filter-button-background: #e9ecef;
+    --filter-button-hover-background: #d3d9df;
+    --filter-button-active-background: #007bff;
+    --filter-button-active-text: #ffffff;
+    --theme-switch-label-color: var(--header-text-color); /* Uses light mode header text */
+    --checkbox-accent-color: #007bff; /* Can be different for light mode if desired */
+}
+
+/* Theme Toggle Switch Styling */
+.theme-switch-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 20px; /* Adjusted for better vertical alignment with h1 */
+    right: 20px; /* Adjusted for padding */
+}
+
+.theme-switch-container label {
+    margin-left: 8px;
+    color: var(--theme-switch-label-color);
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+#themeToggle {
+    cursor: pointer;
+    accent-color: var(--checkbox-accent-color); /* Uses variable for consistency */
+    width: 16px; /* Adjusted size */
+    height: 16px; /* Adjusted size */
+}
+
+/* Adjustments for specific elements in light mode if needed */
+body.light-mode header h1 {
+    text-shadow: none; /* Remove text shadow in light mode for cleaner look */
+}
+
+body.light-mode .container {
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Softer shadow for light mode */
+}
+
+/* Ensure task text input focus shadow is also themed */
+body.light-mode #taskInput:focus {
+    box-shadow: 0 0 8px var(--input-focus-shadow-color);
+}
+body.light-mode #searchInput:focus {
+    box-shadow: 0 0 8px var(--input-focus-shadow-color);
+}
+
+/* Ensure action button text color is visible in light mode during hover */
+body.light-mode .task-item .actions button.edit-btn:hover,
+body.light-mode .task-item .actions button.delete-btn:hover,
+body.light-mode .task-item .actions button.save-btn:hover,
+body.light-mode .task-item .actions button.cancel-btn:hover {
+    color: var(--button-primary-text); /* Use a common text color for buttons on hover, e.g., white */
+}
+
+/* Explicitly set color for edit inputs in light mode for consistency */
+body.light-mode .task-item .edit-input,
+body.light-mode .task-item .edit-due-date-input,
+body.light-mode .task-item .edit-priority-input {
+    color: var(--text-color);
 }

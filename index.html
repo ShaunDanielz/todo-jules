@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -25,6 +26,7 @@
             <ul id="taskList"></ul>
         </section>
         <section class="filter-section">
+            <input type="text" id="searchInput" placeholder="Search tasks...">
             <button id="filterAll">All</button>
             <button id="filterActive">Active</button>
             <button id="filterCompleted">Completed</button>

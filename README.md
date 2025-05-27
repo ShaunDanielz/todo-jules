@@ -1,8 +1,10 @@
-# Sexy Todo App
+# Todo App created by Jules
+
+> **Note:** This repository is an experiment with the Google Jules product. I’m sharing my experiments publicly, but I’m not actively maintaining this code. The goal is to test the functionality of Jules and see how it performs in real-world scenarios.
 
 ## Overview
 
-The Sexy Todo App is a feature-rich, visually appealing todo list manager designed to help you organize your tasks effectively. It provides a modern user interface with a "sexy" dark theme and ensures your tasks are always at your fingertips with browser-based local storage.
+The Todo App created by Jules is a feature-rich, visually appealing todo list manager designed to help you organise your tasks effectively. It provides a modern user interface with a dark theme and ensures your tasks are always at your fingertips with browser-based local storage.
 
 ## Features
 
@@ -22,13 +24,13 @@ The Sexy Todo App is a feature-rich, visually appealing todo list manager design
 ## Technologies Used
 
 *   **HTML5:** For the basic structure and content of the application.
-*   **CSS3:** For styling the application, utilizing modern features like Flexbox for layout and Media Queries for responsiveness.
+*   **CSS3:** For styling the application, utilising modern features like Flexbox for layout and Media Queries for responsiveness.
 *   **JavaScript (ES6+):** For all the application logic, interactivity, and DOM manipulation.
 *   **SortableJS:** A third-party library (included via CDN) used to implement the drag and drop reordering functionality for tasks.
 
 ## Setup and Usage
 
-To run the Sexy Todo App:
+To run the Todo App created by Jules:
 
 1.  **Clone the repository or download the files:**
     ```bash
@@ -47,8 +49,8 @@ No build steps or complex installations are required.
 
 While the current version is packed with features, potential future enhancements could include:
 
-*   User accounts and cloud synchronization.
-*   Customizable themes.
+*   User accounts and cloud synchronisation.
+*   Customisable themes.
 *   Sub-tasks or project categories.
 *   Reminder notifications.
 *   Advanced sorting options.
